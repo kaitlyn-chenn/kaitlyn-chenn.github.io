@@ -1,14 +1,708 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project 1</title>
-</head>
-<body>
-  <h1>Project 1</h1>
-  <p>Project 1: Images of the Russian Empire: Colorizing the Prokudin-Gorskii Photo Collection .</p>
-  <img src="media/img1.jpg" alt="Project 1 Image">
-  <a href="../index.html">Back to Main Page</a>
-</body>
-</html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>COMPSCI 180 Project 1: Images of the Russian Empire: Colorizing the Prokudin-Gorskii Photo Collection </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="971608e0-883d-48d3-a458-9076ab806443" class="page serif"><header><h1 class="page-title">COMPSCI 180 Project 1: Images of the Russian Empire: Colorizing the Prokudin-Gorskii Photo Collection </h1><p class="page-description"></p></header><div class="page-body"><h3 id="854b6b84-6eb0-476e-a9d1-7e196af651e2" class="">Kaitlyn Chen</h3><h2 id="22289d29-0409-46bd-923d-936ea05a657c" class="">Background: </h2><div id="fac66a96-e163-4a75-8658-67140298ab99" class="column-list"><div id="e9d2af3e-84f9-4adf-bcf6-fd733e21c318" style="width:75%" class="column"><p id="45669e23-32bd-4945-a538-d81a4478fcf6" class="">In the early 1900’s, a Russian photographer named<mark class="highlight-default_background"><strong> </strong></mark><mark class="highlight-default_background"><strong><a href="http://en.wikipedia.org/wiki/Prokudin-Gorskii">Sergei Mikhailovich Prokudin-Gorskii</a></strong></mark> traveled across the Russian Empire to capture thousands of colored photographs. He did so by taking 3 versions of each photograph (using red, green, and blue filters)  on a glass plate. In this project I digitalized the 3 RGB glass plate negatives to produce a single RGB colored photograph. </p><h2 id="3a8ead9f-f990-4eff-a87b-487ea8e1d923" class="">Overview:</h2><p id="8138c84f-5c6c-4fbf-b3d4-d171f7785346" class="">The input images throughout this project are .jpg and .tif files, where the 3 color chanels are stacked on top of each other as shown on the right. We can align the images overtop of each other to create a single RGB image. However this alignment can be tricky, so the goal of this project is to write an algorithm to align these three negatives accurately and quickly. Two algorithms are explored in this project.</p><p id="89c0df4d-4879-444f-b1c7-cf38b528b077" class="">
+</p><h2 id="430c3c2a-9246-428f-8e53-634077bcd865" class="">Naive Alignment Algorithm:</h2><p id="e4128aec-f9a9-4aca-900d-fd56d073c00c" class="">In order to measure the accuracy of our alignments,  we need a matching metric. 2 different matching metrics were considered:<div class="indented"><div id="7b2ff1dd-e277-4418-a25f-eb744553ff89" class="column-list"><div id="2f006f2e-37ea-4886-94d7-fe78bc51d72f" style="width:100%" class="column"><ul id="b35cd533-b051-4875-a95a-56c426f41219" class="bulleted-list"><li style="list-style-type:disc">L2 Norm : <figure id="abfd840e-0fa9-4ae0-b338-6c74e2132434" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msqrt><mrow><mo>∑</mo><mrow><mo stretchy="false">(</mo><mtext>image1</mtext><mo>−</mo><mtext>image2</mtext><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{\sum{( \text{image1} - \text{image2} )^2}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.84em;vertical-align:-0.5561em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2839em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mop op-symbol large-op" style="position:relative;top:0em;">∑</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen">(</span><span class="mord text"><span class="mord">image1</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord text"><span class="mord">image2</span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.2439em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.88em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.88em' viewBox='0 0 400000 1944' preserveAspectRatio='xMinYMin slice'><path d='M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5561em;"><span></span></span></span></span></span></span></span></span></span></div></figure></li></ul></div><div id="625b4735-d2e4-4e8e-a4a7-e28faeb0ff39" style="width:100%" class="column"><ul id="b53b2b03-08f2-42d9-9c3e-270236cfafd7" class="bulleted-list"><li style="list-style-type:disc">Normalized Cross Correlation:<figure id="3b9df588-0278-4404-8ed5-fe0f93eb7c45" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mrow><mi mathvariant="bold">i</mi><mi mathvariant="bold">m</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">e</mi><mn mathvariant="bold">1</mn></mrow><mo>⋅</mo><mrow><mi mathvariant="bold">i</mi><mi mathvariant="bold">m</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">e</mi><mn mathvariant="bold">2</mn></mrow></mrow><mrow><mi mathvariant="normal">∥</mi><mrow><mi mathvariant="bold">i</mi><mi mathvariant="bold">m</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">e</mi><mn mathvariant="bold">1</mn></mrow><mi mathvariant="normal">∥</mi><mi mathvariant="normal">∥</mi><mrow><mi mathvariant="bold">i</mi><mi mathvariant="bold">m</mi><mi mathvariant="bold">a</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">e</mi><mn mathvariant="bold">2</mn></mrow><mi mathvariant="normal">∥</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\mathbf{image1} \cdot \mathbf{image2}}{\|\mathbf{image1}\| \|\mathbf{image2}\|}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.3074em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∥</span><span class="mord"><span class="mord mathbf">image1</span></span><span class="mord">∥∥</span><span class="mord"><span class="mord mathbf">image2</span></span><span class="mord">∥</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">image1</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathbf">image2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div></figure></li></ul></div></div><p id="c8fc4317-b61f-472b-9285-a44262dee561" class="">This single scale implementation worked best on low resolution images such as the .jpg images. This algorithm simply did an exhaustive search over all horizontal and vertical offsets in a range of -15 to 15, and chose the offset with the best matching metric score. This metric score was only computed on the internal pixels of each negative since the boarders of the images tamper with the true image, so only 80% of the image was used when calculating L2 scores and 90% of the image was used when calculating NCC scores. I noticed that the NCC matching metric was more robust to the boarders so using 80% versus 90% of the image did not change the results.  The two generated similar results, however the NCC matching metric was quite slower compared to L2. </p><div id="da289feb-c7f4-4513-892a-907106a7630a" class="column-list"></div><div id="9fe836c9-7ab8-4649-a2c3-daf36f3fc1fc" style="width:100%" class="column"><div id="4e535f93-7939-483d-a0ea-0488acb677da" class="column-list"><div id="f1fd0ff7-a3d7-4467-8399-4de4798cce52" style="width:87.5%" class="column"><figure id="93268a3c-1a64-43c5-8a7d-9ff7aa14cd7c" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_l2.jpg"><img style="width:384px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_l2.jpg"/></a><figcaption> L2 matching metric on a jpg image</figcaption></figure></div><div id="c2752a66-e30c-48d9-907c-d61420a2cb21" style="width:93.75%" class="column"><figure id="6b10f493-b3a4-4557-a929-b68d91cddc40" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_ncc.jpg"><img style="width:384px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_ncc.jpg"/></a><figcaption>using NCC matching metric on jpg image</figcaption></figure></div></div></div></div></p></div><div id="a00115f5-31cc-4b25-98b0-2a33b028cd77" style="width:25%" class="column"><figure id="200bcd46-a817-4fe6-8b41-914c4af0728b" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/monastery.jpg"><img style="width:192px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/monastery.jpg"/></a></figure><p id="069dcc4e-c1ea-4e38-bed8-6032246dfed8" class="">
+</p></div></div><h2 id="30d787f9-0001-41c2-be27-2edc13d225b9" class="">Recursive Image Pyramid Alignment Algorithm: </h2><p id="e50a4844-521a-4112-85ac-73a871b05f33" class="">The naive exhaustive search algorithm proved to only work well on low resolution images like .jpg images, and not on high resolution images like .tif images. This multi-scale algorithm recursively scales down the image by half until it reaches a certain size (I used under 500 pixels), at which it computes and returns the best shifting offset using the exhaustive search method (iterating through range of -15 to 15). Now as the recursion unfolds to the larger versions of the image, the offset is doubled and a local search around +2/-2 of this halved offset for the best offset for this larger image is returned.  This allows our algorithm to be much faster than the single scale one. Again, L2 matching metric was used here as it proved to be more efficient. <div class="indented"><div id="b9989a35-5a43-453a-9b81-d54277653c77" class="column-list"><div id="b58c36c4-0398-4b70-ba4d-fa4ae38d96fd" style="width:29.166666666666664%" class="column"><p id="49844eda-8756-4752-b7ae-97246ca09387" class=""><strong>Results: </strong></p><p id="d52cd415-9322-48f0-8129-16c8ab0925c3" class="">Note: **Images attached are compressed version due to limitability of  upload on this website**</p></div><div id="06f83741-6482-4c03-9cd8-75eb4939e881" style="width:95.83333333333333%" class="column"><figure id="ae364c08-52d2-492f-abdb-81001a591474" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Screen_Shot_2024-09-10_at_9.46.00_PM_Large.jpeg"><img style="width:505.75px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Screen_Shot_2024-09-10_at_9.46.00_PM_Large.jpeg"/></a><figcaption>Single scale algorithm on harvesters.tif image</figcaption></figure></div><div id="ea68449a-3231-42f3-abd0-82d650e280bb" style="width:95.83333333333331%" class="column"><figure id="9a509a25-c8de-4944-b407-342f79b82dc5" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/harvesters_pyramid_copy_Large.jpeg"><img style="width:622.4609375px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/harvesters_pyramid_copy_Large.jpeg"/></a><figcaption>Multi scale algorithm on harvesters.tif image</figcaption></figure><p id="64e04af5-c9a9-4aa3-b73d-df5eee64c878" class="">
+</p></div></div></div></p><h2 id="08610745-38d0-41b2-a83c-1c19206e8333" class="">More Results Gallery: </h2><p id="a379401a-6be2-4d13-b00e-ba59f591289e" class="">Note: **Images attached are compressed version due to limitability of  upload on this website**</p><div id="8c5e7685-fd19-4fc5-a79d-5d7119b0e655" class="column-list"><div id="0fa396ff-b564-46c6-b994-1d5cffdcab9c" style="width:100%" class="column"><figure id="f0bb391c-6c3a-4669-bb9c-f73fcd8c7150" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/three_generations_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/three_generations_pyramid_Large.jpeg"/></a><figcaption>three_generations.tif<br/>Green offset: [50, 14]<br/>Red offset: [110, 12]<br/></figcaption></figure><figure id="78499958-6836-4efd-9efc-6652c5c7aed4" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/cathedral_pyramid_Large.jpeg"/></a><figcaption>cathedral.jpg<br/>Green offset: [5, 2]<br/>Red offset: [12, 3]<br/></figcaption></figure><figure id="d56e7b3f-f007-4a36-a468-0f56781d3bc6" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/tobolsk_pyramid_Large.jpeg"><img style="width:384px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/tobolsk_pyramid_Large.jpeg"/></a><figcaption>tobolsk.jpg<br/>Green offset: [3, 3]<br/>Red offset: [7, 3]<br/></figcaption></figure><figure id="18d69fc9-ad22-4d36-b94b-baad656ccdaf" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/emir_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/emir_pyramid_Large.jpeg"/></a><figcaption>emir.tif<br/>Green offset: [49, 24]<br/>Red offset: [0, -332]<br/></figcaption></figure><figure id="11669952-8fdf-40b3-8c0f-fda471005984" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/onion_church_pyramid_Large.jpeg"><img style="width:384px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/onion_church_pyramid_Large.jpeg"/></a><figcaption>onion_church.tif<br/>Green offset: [51, 26]<br/>Red offset: [108, 36]<br/></figcaption></figure><figure id="c295fe17-2f4f-4aa6-927d-fdb2d414d4be" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Palace_in_the_village_of_Borodino_pyramid_copy_Large.jpeg"><img style="width:326.6640625px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Palace_in_the_village_of_Borodino_pyramid_copy_Large.jpeg"/></a><figcaption>Palace in the village of Borodino.tif<br/>Green offset: [51, -6]<br/>Red offset: [121, -30]<br/></figcaption></figure></div><div id="a69c076e-eaa6-4fc3-a3cc-0a2ad3298118" style="width:100%" class="column"><figure id="dca5e4ed-319f-4f73-a51a-9196a44772d2" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/church_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/church_pyramid_Large.jpeg"/></a><figcaption>church.tif<br/>Green offset: [25, 4]<br/>Red offset: [58, -4]<br/></figcaption></figure><figure id="f9fbb4c8-4678-4d7a-8adb-f0db3fc6bfc4" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/self_portrait_pyramid_Large.jpeg"><img style="width:384px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/self_portrait_pyramid_Large.jpeg"/></a><figcaption>self_portrait.tif<br/>Green offset: [78, 29]<br/>Red offset: [176, 37]<br/></figcaption></figure><figure id="54c8f937-1669-4649-b00e-0f1c4c9b313d" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/train_pyramid_Large.jpeg"><img style="width:432px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/train_pyramid_Large.jpeg"/></a><figcaption>train.tif<br/>Green offset: [42, 6]<br/>Red offset: [87, 32]<br/></figcaption></figure><figure id="7411b2e6-ca4b-4be3-b3e6-79feffeb32ce" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/lady_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/lady_pyramid_Large.jpeg"/></a><figcaption>lady.tif<br/>Green offset: [49, 8]<br/>Red offset: [109, 11]<br/></figcaption></figure><figure id="2bb09e1d-d78c-4e0e-b96e-d3f2de52d121" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Church_in_the_village_of_Shaidoma_pyramid_copy_Large.jpeg"><img style="width:326.6640625px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/Church_in_the_village_of_Shaidoma_pyramid_copy_Large.jpeg"/></a><figcaption>Church in the village of Shaidoma.tif<br/>Green offset: [40, 7]<br/>Red offset: [130, 11]<br/></figcaption></figure><p id="446c9eb3-fae3-488b-ac5d-d66325b8029c" class="">
+</p></div><div id="d1902cb7-17ad-4e2e-a53f-22165984d730" style="width:100%" class="column"><figure id="8c3f6749-6dd0-418d-bd8d-0712b860f4eb" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/monastery_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/monastery_pyramid_Large.jpeg"/></a><figcaption>monastery.jpg<br/>Green offset: [-3, -2]<br/>Red offset: [3, 2]<br/></figcaption></figure><figure id="0814b4ba-2634-477b-a0ad-968add605350" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/sculpture_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/sculpture_pyramid_Large.jpeg"/></a><figcaption>sculpture.tif<br/>Green offset: [33, -11]<br/>Red offset: [140, -27]<br/></figcaption></figure><figure id="74b768a3-e62d-4668-b041-4c155fdc083b" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/melons_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/melons_pyramid_Large.jpeg"/></a><figcaption>melons.tif<br/>Green offset: [81, 10]<br/>Red offset: [178, 13]<br/></figcaption></figure><figure id="248804cd-c86d-48eb-b601-16711ac5f666" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/icon_pyramid_Large.jpeg"><img style="width:336px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/icon_pyramid_Large.jpeg"/></a><figcaption> icon.tif<br/>Green offset: [40, 17]<br/>Red offset: [89, 23]<br/></figcaption></figure><figure id="bf4b0eb4-7ac9-458f-9cce-aceb389b166f" class="image"><a href="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/On_the_island_of_Capri_pyramid_copy_Large.jpeg"><img style="width:326.6640625px" src="COMPSCI%20180%20Project%201%20Images%20of%20the%20Russian%20Empire%20971608e0883d48d3a4589076ab806443/On_the_island_of_Capri_pyramid_copy_Large.jpeg"/></a><figcaption>On the island of Capri.tif<br/>Green offset: [40, -12]<br/>Red offset: [101, -11]<br/></figcaption></figure><p id="77d2d261-9bd1-4e9b-b78a-213e9767cf9a" class="">
+</p></div></div><h2 id="878eb5f8-073c-48f0-aa67-02343603199b" class="">Conclusions: </h2><p id="837c61a1-a513-4dfd-b1c1-6bc5f8d69d42" class="">If I had more time I would have liked to implement auto cropping to give the images a finalized look, such that the colored edges around the image are eliminated. Also would have implemented edge detection to better align the images, particularly needed to emir.tif and monastery.jpg. We can see that image pyramiding overall works quite well on most images however improvements would be necessary for others. </p><div id="99902851-4ac3-4f4f-9460-483179a184aa" class="column-list"><div id="217483c5-ae11-429c-aca5-c132bf1f1341" style="width:36.84210526315789%" class="column"><p id="b03b4234-f3eb-4d42-832c-fdefe8c3ae2b" class="">
+</p></div><div id="1984ef3e-ba4b-41ea-88ea-5084bf571dcc" style="width:63.1578947368421%" class="column"><p id="25414caf-0d43-4aca-9fc9-95672eece55f" class="">
+</p></div></div><div id="fdbe39bc-bc4f-44b7-b027-a22de20b4a21" class="column-list"><div id="0632490d-4546-487e-807c-c206a2e46e53" style="width:100%" class="column"><p id="234b4a65-d66f-4cba-b284-dbbb156262ab" class="">
+</p></div><div id="ac5d88a3-5224-4a00-b838-ac4d40787686" style="width:100%" class="column"><p id="e6a95b8c-2862-4330-9826-7cbab70627f0" class="">
+</p><p id="6ef1d7a5-58dc-4071-8986-3fd5672797b2" class="">
+</p></div><div id="9d85cd1f-cc21-47c1-9302-2a574cc3249a" style="width:100%" class="column"><p id="f30294ca-854e-44f3-9bb5-e5027152ef32" class="">
+</p></div><div id="9d5ab874-7651-4a23-9341-e10582fcbe6e" style="width:100%" class="column"><p id="1fa57ff2-c392-4196-8311-9d4bbe75eeab" class="">
+</p><p id="4e56bc19-c6aa-4e4f-820f-efbd810b7313" class="">
+</p></div></div><div id="f2e12e27-c29d-47e1-83e6-006bc9aa2f02" class="column-list"><div id="5eb692af-308b-4340-9c21-5cfc30a3aa14" style="width:100%" class="column"><p id="67838b3c-f5a5-4fd8-8bfa-5c7ad04b8489" class="">
+</p></div><div id="a310b929-4c26-4e53-9c6b-85bd7b88b03f" style="width:100%" class="column"><p id="7f86590a-6952-4edc-88a9-8a2b9183408e" class="">
+</p></div></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
