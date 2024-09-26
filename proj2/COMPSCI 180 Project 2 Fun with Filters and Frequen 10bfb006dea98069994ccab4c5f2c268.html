@@ -1,0 +1,799 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>COMPSCI 180 Project 2: Fun with Filters and Frequencies!</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="10bfb006-dea9-8069-994c-cab4c5f2c268" class="page serif"><header><h1 class="page-title">COMPSCI 180 Project 2: <strong>Fun with Filters and Frequencies!</strong></h1><p class="page-description"></p></header><div class="page-body"><h3 id="e6662096-bcb6-46b8-b207-6151361a8dda" class="">Kaitlyn Chen</h3><h2 id="c327f10c-e3f0-40da-b92e-4e4f23531e7c" class="">Introduction: </h2><p id="537f1d62-31a0-4457-90fb-7c9100173013" class="">This project explores how to find image edges, sharpen images, make hybrid images, and blend images using filters are frequencies. The most important thing I learned from this project is that frequencies within an image are very important and that Gaussian filters are very powerful! This also means you can manipulate images quite a lot by just manipulating their frequencies! </p><p id="10dfb006-dea9-8014-a394-d1f92a853d4e" class="">
+</p><h2 id="943f835e-696c-4972-8a08-94da30a5534b" class="">Part 1.1 Finite Difference Operators:</h2><div id="10cfb006-dea9-8028-b1ae-fa14272438f8" class="column-list"><div id="10cfb006-dea9-80f1-b358-d564e200a522" style="width:81.25%" class="column"><p id="10cfb006-dea9-80e2-b077-f6c0d32cfd54" class="block-color-gray_background">This part of the project aims to find and highlight the edges of the given cameraman image. <br/><br/>The first approach used here is using finite difference filters in the x, y directions:  <br/><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold">D</mi><mi mathvariant="bold">x</mi></msub><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo separator="true">,</mo><mspace width="1em"/><msub><mi mathvariant="bold">D</mi><mi mathvariant="bold">y</mi></msub><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{D_x} = \begin{bmatrix} 1 &amp; -1 \end{bmatrix}, \quad \mathbf{D_y} = \begin{bmatrix} 1 \\ -1 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8361em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1611em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathbf mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">]</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1611em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathbf mtight" style="margin-right:0.01597em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span><span>﻿</span></span> . These filters are used to create partial derivatives in the x, y directions. This is done by convolving the original image with these finite difference filters in their respective directions using convolve2d from scipy.signal library with mode = ‘same’.<br/><br/>A gradient magnitude is then created by taking the l2 norm of a gradient vector where the gradient in x and gradient in y are values of such vector. This gradient magnitude image essentially combines the gradient in x and gradient in y image together.<br/><br/>To create a true edge image, the gradient magnitude image is binarized. I found a threshold of 0.2 to work well in balencing the noise while still showing all the real edges.<br/><br/></p></div><div id="10cfb006-dea9-8008-a334-da586d103508" style="width:43.75%" class="column"><figure id="10cfb006-dea9-800d-b5dd-ef7e794b279b" class="image" style="text-align:left"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cameraman.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cameraman.png"/></a><figcaption>Original Cameraman Image</figcaption></figure></div></div><div id="10cfb006-dea9-80c7-aab2-d92cbf25162a" class="column-list"><div id="10cfb006-dea9-8033-8a9e-c5a5f71aa574" style="width:400.0000000000001%" class="column"><figure id="10cfb006-dea9-8080-82ba-f47f17c4ff2a" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Gradient_x_Direction.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Gradient_x_Direction.png"/></a></figure></div><div id="10cfb006-dea9-8049-b092-f24f3639ceba" style="width:100%" class="column"><figure id="10cfb006-dea9-80ee-8b84-cddd03ada672" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Gradient_y_Direction.png"><img style="width:432px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Gradient_y_Direction.png"/></a></figure></div><div id="10dfb006-dea9-8071-b854-ff745f9e0e1e" style="width:100%" class="column"><figure id="10cfb006-dea9-8067-9c91-e72a2d5eb393" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_magnitude.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_magnitude.png"/></a></figure></div><div id="10cfb006-dea9-8008-9460-eeedfb2a1b37" style="width:400.0000000000001%" class="column"><figure id="10cfb006-dea9-8081-a4a4-cae7dc2cdc1b" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/binary_edge_img.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/binary_edge_img.png"/></a></figure><p id="10cfb006-dea9-80e0-898a-de7e5a443a1d" class="">
+</p></div></div><h2 id="10cfb006-dea9-8061-9ab6-e387273688b1" class="">Part 1.2: <strong> Derivative of Gaussian (DoG) Filter</strong></h2><div id="10cfb006-dea9-80c1-87f9-e0f9ca006b66" class="column-list"><div id="14299744-c784-4edf-830f-43f0baa7580e" style="width:87.5%" class="column"><p id="10cfb006-dea9-80c6-bb9f-f442be28c9da" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Gaussian Filter:</span><br/>The finite difference operator gave us a fairly noisy edge image, so in this section we will use a Gaussian filter, acting as a smoothing operator. We perform all the same steps as the previous section, but instead utilize a blurred version of the original image instead fo the original. <br/><br/>A blurred version of the original image is created by convolving it with a 2D gaussian filter. A 2D gaussian filter can be created by first creating a 1D gaussian filter with cv2.getGaussianKernel( ) then taking the outer product of it and its transpose. A kernel size of 5 and sigma of 1 was chosen in this scenario. The code is given below, as it it used throughout the rest of the project to create a 2D gaussian filter (with different kernel sizes and sigmas).<br/><br/>We can note that using a Gaussian filter significantly reduced the noise in the edge image, however details are lost; such as the details within the camera and background. We can also see that the white edges are much thicker and prominent. <br/></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="10dfb006-dea9-8043-b97b-dc77847b544f" class="code"><code class="language-Python">gaussian_1d = cv2.getGaussianKernel(ksize=5, sigma=1)
+gaussian_2d = np.outer(gaussian_1d, gaussian_1d.T)</code></pre></div><div id="d653712f-3e0b-4da2-976c-ec5bf0522d60" style="width:43.74999999999999%" class="column"><figure id="10cfb006-dea9-800c-ac61-d73dd7c4b0fb" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_cameraman_img.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_cameraman_img.png"/></a></figure><p id="10cfb006-dea9-802d-9a5f-f3436cd0b805" class="">
+</p></div></div><div id="10cfb006-dea9-8064-a5a1-de97486f5e07" class="column-list"><div id="c59bc89c-6dc9-41a7-9dbc-b5d56a3bf459" style="width:103.125%" class="column"><figure id="10cfb006-dea9-806b-b789-dbb6cda9c7f2" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_mag_with_gaussian_filter_smoothing.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_mag_with_gaussian_filter_smoothing.png"/></a></figure></div><div id="5694d421-d59a-458a-ab58-d2c8c9f02e7b" style="width:90.625%" class="column"><figure id="10cfb006-dea9-8050-b944-c8901825b900" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gaussian_filter_Gradient_in_x_direction.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gaussian_filter_Gradient_in_x_direction.png"/></a></figure></div><div id="a03254d8-0197-4989-8e10-b299d3cda001" style="width:87.5%" class="column"><figure id="10cfb006-dea9-80e1-8f3d-ed39c074fcce" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gaussian_filter_Gradient_in_y_direction.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gaussian_filter_Gradient_in_y_direction.png"/></a></figure></div><div id="4fc6224f-166c-4a42-8d1a-60c4c043b1a9" style="width:90.625%" class="column"><figure id="10cfb006-dea9-80f9-a7ec-d10256b598a3" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/binary_edge_image_DoG.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/binary_edge_image_DoG.png"/></a></figure></div></div><div id="10dfb006-dea9-807b-ae1d-e270892c1e0c" class="column-list"><div id="10dfb006-dea9-80e0-a969-f7d5b75ce3b8" style="width:54.166666666666664%" class="column"><p id="10cfb006-dea9-80e6-bd26-d02f31858ef9" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Derivative of Gaussian: </span><br/>Now instead of convolving twice, we can just perform a single convolution by creating derivative of Gaussian (DoG) filters. These are created by convolving the previous Gaussian kernels with their respective finite difference filter. The original image is then convolved with with these DoG filters to create the respective partial derivatives images. A gradient magnitude image and edge image is then created with the same steps are previous two approaches. <br/><br/>We can verify that the result in this third approach is very very similar to that of the second approach. especially compared to the first approach’s results<br/></p></div><div id="10dfb006-dea9-8009-ac51-c02fce0c9560" style="width:25.000000000000007%" class="column"><figure id="10cfb006-dea9-807f-936d-e53708a7cc7e" class="image" style="text-align:center"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_filter_in_x_direction.png"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_filter_in_x_direction.png"/></a></figure></div><div id="10dfb006-dea9-80a8-bdc2-fae7d9f21aec" style="width:20.83333333333335%" class="column"><figure id="10cfb006-dea9-80aa-a5f8-dd46b4db13a4" class="image" style="text-align:center"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_filter_in_y_direction.png"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_filter_in_y_direction.png"/></a></figure></div></div><div id="10cfb006-dea9-8014-b9cd-c33ca455883b" class="column-list"><div id="60584886-1c7a-4535-bb47-a1d0312d7f73" style="width:322.2222222222223%" class="column"><figure id="10cfb006-dea9-8052-bbb6-e455ca3f30be" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_gradient_in_x_direction.png"><img style="width:331.7621765136719px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_gradient_in_x_direction.png"/></a></figure></div><div id="12431ba5-bb50-4079-ac9a-5d467dd9ff51" style="width:322.2222222222223%" class="column"><figure id="10cfb006-dea9-80cb-a457-ebb4ed6dd796" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_gradient_in_y_direction.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_gradient_in_y_direction.png"/></a></figure></div><div id="10dfb006-dea9-8037-b834-d9fe1568889d" style="width:88.8888888888889%" class="column"><figure id="10cfb006-dea9-8014-b4ab-e6be7e5f82b6" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_mag_with_DoG_Filter.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/gradient_mag_with_DoG_Filter.png"/></a></figure></div><div id="6a254d4a-6385-4360-ad04-fb7337545050" style="width:322.2222222222223%" class="column"><figure id="10cfb006-dea9-8059-b9a1-ce9e43ad5af0" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_binary_edge_img.png"><img style="width:331.7621765136719px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DoG_binary_edge_img.png"/></a></figure><p id="86f4acef-1460-4e14-8003-79985e547513" class="">
+</p></div></div><h2 id="10cfb006-dea9-8088-982c-cbb39045aac5" class="">Part 2.1: Image “Sharpening”</h2><div id="10cfb006-dea9-80e9-adb5-dc4c88426bba" class="column-list"><div id="29b0bc19-3b47-43bb-8674-aa294d510113" style="width:81.25%" class="column"><p id="b4e3d7c4-0e4c-4616-a118-0643f665e248" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Unsharp Masking Technique:</span><br/>The goal of this section is to sharpen images by enhancing high frequencies. The given image is a not very clear image of the Taj Mahal. <br/><br/>To get only the high frequencies of an image we can subtract the low frequencies from the original image. A gaussian filter helps with this as it is a low pass filter, keeping only the low frequencies of an image. So get the low frequencies, we this we convolve the original image with the gaussian kernel. <br/><br/>Once we have the high frequencies we can multiply it by some alpha value, to determine how much “sharpening” we want and add it to the original image. (Result images are shown below with different alpha values) <br/><br/>Note: for colored images we need to perform this “unsharp mask filter” on each r, g, b color channel and then stack the result.<br/></p></div><div id="c3c13b9a-12ce-47e5-bf84-198f25ebba3d" style="width:43.749999999999986%" class="column"><figure id="10cfb006-dea9-80c9-9383-c93701e040fc" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/taj.jpg"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/taj.jpg"/></a><figcaption>Original Taj Image</figcaption></figure></div></div><div id="10cfb006-dea9-8010-83b4-de0f2d1a48c8" class="column-list"><div id="6d1a6a51-a734-42a8-b001-2565cd2f5e07" style="width:100%" class="column"><figure id="10cfb006-dea9-809f-ac2f-d21f20bbc9d0" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_taj_img.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_taj_img.png"/></a></figure></div><div id="d34e75b9-fb79-40bd-83fc-97db1d5af6e3" style="width:100%" class="column"><figure id="10cfb006-dea9-8046-ae69-f93ff94e2756" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha1.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha1.png"/></a></figure><p id="10cfb006-dea9-80a3-b239-df8a1ed914ac" class="">
+</p></div><div id="e07e827f-045f-49f6-ad23-3e5b8de806d5" style="width:100%" class="column"><figure id="10cfb006-dea9-8031-b6d2-ef9b053e8b7b" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha2.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha2.png"/></a></figure><p id="ef6896f0-7c88-4b2d-8734-86d1d7bab20a" class="">
+</p></div><div id="1bf33a58-e216-428d-a84b-d14096ca9e8f" style="width:100%" class="column"><figure id="10cfb006-dea9-8022-a880-d4530a6a5ab5" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha4.png"><img style="width:337.482666015625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_taj_image_alpha4.png"/></a></figure><p id="d8a56727-3d78-4d18-9362-cd87db63a733" class="">
+</p></div></div><p id="10dfb006-dea9-8047-813c-d89601e81e3a" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Applied to other images: </span>The original image of Oski is a little blurry, so sharpening it made it much better. However, the original puppy image was already quite sharp, so sharpening it beyond a certain alpha value gave unnatural results. But we can see that an alpha of 0.1 gave an image close to the original (further alpha value refinement could have created a better match to the original puppy image)</p><div id="10cfb006-dea9-8085-9ee4-d0b95671598a" class="column-list"><div id="10cfb006-dea9-80bb-8643-e69a90b74fd2" style="width:95.83333333333333%" class="column"><p id="10cfb006-dea9-80c7-8828-d12371d7b0ba" class="">Original Oski Image</p><figure id="10cfb006-dea9-80aa-9176-c50cdf686f77" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/oski.jpg"><img style="width:480px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/oski.jpg"/></a></figure></div><div id="10cfb006-dea9-8021-9704-fb0925f9d35b" style="width:104.16666666666666%" class="column"><figure id="10cfb006-dea9-8075-a3dd-c57698fd87a6" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_oski_img.png"><img style="width:528px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/blurred_oski_img.png"/></a></figure></div><div id="10cfb006-dea9-80ad-b3ce-fc8df4652d6a" style="width:119.99999999999996%" class="column"><figure id="10cfb006-dea9-8004-b48f-f4e1b7c91516" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_oski_alpha1.2.png"><img style="width:576px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sharpened_oski_alpha1.2.png"/></a></figure></div></div><div id="10dfb006-dea9-8071-8d9b-d5f58332529f" class="column-list"><div id="10dfb006-dea9-8080-b98e-e51b3c935aaf" style="width:25%" class="column"><p id="10cfb006-dea9-8098-9422-cf3634e1aa5e" class="">Puppy Original Image</p><figure id="10cfb006-dea9-80e7-83c2-f0d56813008c" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/puppy.jpg"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/puppy.jpg"/></a></figure></div><div id="10dfb006-dea9-8046-9a38-de4228ad2153" style="width:25%" class="column"><p id="10dfb006-dea9-8077-8cba-fbf18b172b2c" class="">Blurred Puppy Image</p><figure id="10dfb006-dea9-80e3-b6da-ecdc7cd2521f" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/3ffcdfd5-4483-4de9-a865-521f9ff18786.png"><img style="width:317.708830548926px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/3ffcdfd5-4483-4de9-a865-521f9ff18786.png"/></a></figure></div><div id="10dfb006-dea9-806a-a728-f7ab8f523ddf" style="width:25%" class="column"><p id="10dfb006-dea9-8093-969a-f317da0f1403" class="">Sharpened Puppy Image with Alpha = 0.7</p><figure id="10dfb006-dea9-809d-8019-c52df210dc7f" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/766b34ca-84d7-400f-96ca-1dd3acdccf90.png"><img style="width:319.236276849642px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/766b34ca-84d7-400f-96ca-1dd3acdccf90.png"/></a></figure></div><div id="10dfb006-dea9-8043-94c1-f31cc68ed26e" style="width:25%" class="column"><p id="10dfb006-dea9-800f-8af9-ef1485803b35" class="">Sharpened Puppy Image with Alpha = 2</p><figure id="10cfb006-dea9-80cb-a1d3-e01cb03e3dbf" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2bff7af6-78f6-4f26-ae24-72dbf841fc91.png"><img style="width:321.5347721822542px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2bff7af6-78f6-4f26-ae24-72dbf841fc91.png"/></a></figure></div></div><p id="10dfb006-dea9-8081-9e7d-ce2bcda14501" class="">
+</p><h2 id="10cfb006-dea9-80c4-a413-feec665f3ad6" class=""><strong>Part 2.2: Hybrid Images</strong></h2><div id="10cfb006-dea9-805a-a0b3-ee4a5005aacd" class="column-list"><div id="10dfb006-dea9-8065-b5f6-d12b387b6ba7" style="width:87.5%" class="column"><p id="10dfb006-dea9-8084-8aa3-e646cade3f07" class="block-color-gray_background">The goal of this section is to create hybrid images with the approach from SIGGRAPH 2006 <a href="http://olivalab.mit.edu/publications/OlivaTorralb_Hybrid_Siggraph06.pdf">paper</a> by Oliva, Torralba, and Schyns. The interpretation of hybrid images change with distance to the image. When viewing an image up close, the high frequencies of the image dominate, while the converse occurs with distance. Blending high frequencies of one image with low frequencies of another yields such hybrid images. <br/><br/>I first aligned the two images using the provided staff code. I then chose which image to use as the low frequency image and which as the high frequency image. I then extracted only their respective frequencies using the approach from part 2.1 above, and simply added them to create the hybrid image. <br/>Note: for colored images, each color channel must be processed seperately then combined<br/></p></div><div id="2509a48e-6c6c-4194-9f21-9a2405f22297" style="width:29.16666666666665%" class="column"><figure id="e08ae251-6955-41d9-9d5f-5d446f9568ae" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DerekPicture.jpg"><img style="width:192px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/DerekPicture.jpg"/></a><figcaption>Original Derek Image</figcaption></figure></div><div id="372a5c87-ae25-4ff0-a3bc-72c43ee3337d" style="width:50.00000000000002%" class="column"><figure id="1d96e23a-c1b8-4363-872d-e7887cc8aaa1" class="image" style="text-align:left"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/nutmeg.jpg"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/nutmeg.jpg"/></a><figcaption>Original Nutmeg Image</figcaption></figure></div></div><div id="10cfb006-dea9-8057-adf1-de10e6182d95" class="column-list"><div id="10dfb006-dea9-8024-b21c-d577c8c26708" style="width:72.50000000000001%" class="column"><p id="10dfb006-dea9-8018-a0fc-cc6cbdae4e5a" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Bells &amp; Whistles:</span><br/>I tried using color to enhance the effect. I noticed that the cat’s color was not prominent enough against both the colored Derek image and gray Derek image to make a clear difference. Since both Derek and the cat have colored eyes (blue and green), keeping both images gray creates the best hybrid image in my opinion. <br/></p><p id="10dfb006-dea9-80cd-9518-c418d9b8f6a9" class="">
+</p></div><div id="10cfb006-dea9-8070-b973-fe0df1bfd499" style="width:64.99999999999999%" class="column"><figure id="10cfb006-dea9-8064-9ac0-ef5d4d4f3505" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/59c15ed5-0a75-4b92-b5ac-c8f0ea645329.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/59c15ed5-0a75-4b92-b5ac-c8f0ea645329.png"/></a><figcaption>Derek - low frequency, colored<br/>Nutmeg - high frequency, colored<br/></figcaption></figure></div><div id="10cfb006-dea9-8061-ba6c-f131a9be2028" style="width:62.49999999999998%" class="column"><figure id="10cfb006-dea9-8066-a047-c10887b0be5f" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/1b4174a3-94a5-4fe4-a10a-f30e6c6d73bc.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/1b4174a3-94a5-4fe4-a10a-f30e6c6d73bc.png"/></a><figcaption>Derek - low frequency, colored<br/>Nutmeg - high frequency, gray<br/></figcaption></figure><p id="10cfb006-dea9-80f6-b535-fac1ae24b4c1" class="">
+</p></div><div id="10cfb006-dea9-80cc-9dac-d871fbc0d0fd" style="width:60%" class="column"><figure id="10cfb006-dea9-8040-92d4-e3b647c0ad1f" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cf5a261a-6441-4246-9c8c-9da62ae689d3.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cf5a261a-6441-4246-9c8c-9da62ae689d3.png"/></a><figcaption>Derek - low frequency, gray<br/>Nutmug - high frequency, gray<br/></figcaption></figure><p id="10cfb006-dea9-801d-bcd5-c69e17b530b0" class="">
+</p></div><div id="10cfb006-dea9-80b3-89cc-ef40584c960a" style="width:59.999999999999964%" class="column"><figure id="10cfb006-dea9-80ed-ba8e-d8a9fe3cd16d" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/6ae7c04b-dc74-414c-af4d-4260f99956ce.png"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/6ae7c04b-dc74-414c-af4d-4260f99956ce.png"/></a><figcaption>Derek - low frequency, gray<br/>Nutmeg - high frequency, colored<br/><br/></figcaption></figure></div></div><hr id="10cfb006-dea9-807f-b7aa-f9e48d1f283c"/><div id="10cfb006-dea9-8010-b3cd-ded418257483" class="column-list"><div id="10dfb006-dea9-808c-9188-ceaba72cdc4a" style="width:44.64285714285714%" class="column"><p id="10dfb006-dea9-8067-b4d9-ed3eb9504162" class="block-color-gray_background"><span style="border-bottom:0.05em solid">More images - Cillian Murphy + Antz: <br/><br/></span>Many, including myself, believe Cillian Murphy looks like the character from the movie Antz, so I thought this was the perfect opportunity. <br/><br/>When looking at the large hybrid image, you  see the high frequency ant more, while the opposite is true when looking at the shrunken image on its right.<br/><br/>The two images are quite different so the alignment looks funny, but nonetheless I think the functionality of the hybrid image using both gray turned out great. <br/></p></div><div id="10cfb006-dea9-80eb-bb56-d22522ed652c" style="width:35.71428571428572%" class="column"><figure id="10cfb006-dea9-8030-b10b-eca316e10b89" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/antz.jpg"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/antz.jpg"/></a><figcaption>Original Antz Image</figcaption></figure></div><div id="10cfb006-dea9-8063-9c42-eb32651e3715" style="width:1.7857142857142856%" class="column"><p id="10cfb006-dea9-8062-bea5-ea52c3f3d955" class="">
+</p><p id="10cfb006-dea9-8016-bed3-d8f60c2bdf31" class="">
+</p><p id="10cfb006-dea9-80f4-82cd-c2413c7372b0" class="">
+</p><p id="10cfb006-dea9-801e-9d53-d1757e5dfa85" class="">
+</p><h1 id="10cfb006-dea9-80bc-b55c-efcce44745e9" class=""><strong>+</strong></h1></div><div id="10cfb006-dea9-802c-b1ac-da61b2f6c889" style="width:30.357142857142854%" class="column"><figure id="10cfb006-dea9-8045-a8dd-ec5db3f5812b" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cillian.jpg"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/cillian.jpg"/></a><figcaption>Cillian Murphy Image</figcaption></figure></div><div id="10cfb006-dea9-80ab-9c8b-da79dfc30426" style="width:1.7857142857142856%" class="column"><p id="10cfb006-dea9-80ea-a9d7-e123c31578c6" class="">
+</p><h1 id="10cfb006-dea9-80c5-92b1-c66d23697e7e" class="">  =</h1><p id="10cfb006-dea9-80dd-96b9-e73f1f7daed5" class="">
+</p></div><div id="10cfb006-dea9-8062-baa2-dbfc9ccd4056" style="width:42.857142857142854%" class="column"><figure id="10cfb006-dea9-80c2-b488-e8cca8663a99" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/aafd5cf5-be7c-4280-8e07-e0c7b6244e59.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/aafd5cf5-be7c-4280-8e07-e0c7b6244e59.png"/></a><figcaption>Cillian &amp; Antz Hybrid Image<br/>Cillian - low frequency, gray<br/>Antz - high frequency, gray<br/></figcaption></figure></div><div id="10cfb006-dea9-80d6-b2d8-dd5026024b04" style="width:16.071428571428566%" class="column"><p id="10cfb006-dea9-809d-b1d4-f0e5cec8b420" class="">
+</p><p id="10cfb006-dea9-80c8-899c-cd7e30d0ca87" class="">
+</p><p id="10cfb006-dea9-8037-a8aa-ee2f3665fa62" class="">
+</p><p id="10cfb006-dea9-8000-ba74-f5ad9fee533a" class="">
+</p><figure id="10cfb006-dea9-8034-9b78-ccfa56253e46" class="image" style="text-align:center"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/9172794d-1102-4264-94de-04f92325a27f.png"><img style="width:192px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/9172794d-1102-4264-94de-04f92325a27f.png"/></a><figcaption>Same image as to the left but shrunk</figcaption></figure><p id="10cfb006-dea9-808d-924e-e63a5de06082" class="">
+</p></div></div><hr id="10cfb006-dea9-806e-b255-cfd08040c760"/><div id="10cfb006-dea9-8011-9012-c74d9a5f0855" class="column-list"><div id="10dfb006-dea9-8035-8ea6-cd77c99767fc" style="width:66.66666666666666%" class="column"><p id="10dfb006-dea9-8085-9764-c0c4928162fd" class="block-color-gray_background"><span style="border-bottom:0.05em solid">More images - Heath Ledger + Joker (Failure): <br/><br/></span>Before generating the hybrid image I thought a grayscale low frequency image of heath ledger with a colored high frequency joker would be best. However, the color of the joker did not stand out as much as hoped. And the tilt of the Joker’s head distorts the hybrid image and alignment. <br/><br/>Below is the 2D frequency analysis of these two input images, their filtered images, and the hybrid image. <br/></p><p id="10dfb006-dea9-806d-9070-d7865353c70d" class="">
+</p></div><div id="4ff85ddc-c67b-4ae7-9651-fece202f1761" style="width:33.33333333333334%" class="column"><figure id="10cfb006-dea9-80cd-9904-e0688d90ee7d" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/heath.jpg"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/heath.jpg"/></a><figcaption>Original Heath Ledger Image</figcaption></figure></div><div id="10cfb006-dea9-8010-a0a6-f11862b8ad07" style="width:66.66666666666667%" class="column"><figure id="10cfb006-dea9-80fb-8f74-cbe45f4695ee" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/joke.jpg"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/joke.jpg"/></a><figcaption>Original Joker Image</figcaption></figure></div></div><div id="10cfb006-dea9-8049-9d99-c9e58edae6d4" class="column-list"><div id="10cfb006-dea9-800f-ab1c-d6ba17935a85" style="width:125.92592592592592%" class="column"><figure id="10cfb006-dea9-8013-b4df-d149fe112d2b" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/90fdd6e5-9bd1-43bd-a995-7f2f38fc0c1c.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/90fdd6e5-9bd1-43bd-a995-7f2f38fc0c1c.png"/></a><figcaption>Heath Ledger  - low frequency, color<br/>Joker - high frequency, color <br/></figcaption></figure><p id="10cfb006-dea9-80a0-aed6-fe12442c0016" class="">
+</p></div><div id="10cfb006-dea9-80ec-b3be-e13029027777" style="width:49.47089947089947%" class="column"><figure id="10cfb006-dea9-80a3-acdd-fb28705cec3a" class="image" style="text-align:center"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/13437978-2c19-478b-9ba6-6c1ce90d0638.png"><img style="width:132px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/13437978-2c19-478b-9ba6-6c1ce90d0638.png"/></a><figcaption>same image as to the right</figcaption></figure><p id="10cfb006-dea9-8042-97ed-d04400fc8ff7" class="">
+</p><figure id="10cfb006-dea9-801c-b6ac-c3f5c779b2af" class="image" style="text-align:center"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e479726d-ec84-46a9-857a-a4437a531c5c.png"><img style="width:132px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e479726d-ec84-46a9-857a-a4437a531c5c.png"/></a><figcaption>same image as to the left</figcaption></figure></div><div id="10cfb006-dea9-8057-8b6d-e7ad540bc3e3" style="width:121.42857142857144%" class="column"><figure id="10cfb006-dea9-80d8-8889-df4c2aed6f75" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/5b2596c0-1c27-4633-aa8b-c283468b035b.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/5b2596c0-1c27-4633-aa8b-c283468b035b.png"/></a><figcaption>Heath Ledger - low frequency, gray<br/>Joker - high frequency, color<br/></figcaption></figure><p id="10cfb006-dea9-8065-9346-cd4cd9e6b6ae" class="">
+</p></div></div><p id="10cfb006-dea9-809a-a7e4-e1daae05b1d0" class="">Frequency Analysis for Heath Ledger - Joker Images: </p><div id="10cfb006-dea9-8099-9b06-ec50ef6cbf18" class="column-list"><div id="10cfb006-dea9-8050-bd3e-d879e57b247e" style="width:40%" class="column"><figure id="10cfb006-dea9-80ae-a365-fa6db3878b05" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f8c73cca-e28b-4b45-989f-5848de417906.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f8c73cca-e28b-4b45-989f-5848de417906.png"/></a><figcaption>2D Fourier Transform of Heath Ledger (low frequency Image)</figcaption></figure></div><div id="10dfb006-dea9-8028-8222-ccbcc14f998a" style="width:50%" class="column"><figure id="10cfb006-dea9-808e-821b-e4d58fbe14a5" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e27933be-7a7b-4722-b518-34413c577147.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e27933be-7a7b-4722-b518-34413c577147.png"/></a><figcaption>2D Fourier Transform of Joker (high frequency image)</figcaption></figure></div><div id="10cfb006-dea9-80f8-95c4-ec3bcbe188a4" style="width:40%" class="column"><figure id="10cfb006-dea9-80d5-af52-e173a295bbad" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/0b6b617c-c6ac-4e3a-ba9a-83da1c9dd21a.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/0b6b617c-c6ac-4e3a-ba9a-83da1c9dd21a.png"/></a><figcaption>2D Fourier Transform of Low Pass Filtered Heath Ledger (low frequency Image)</figcaption></figure><p id="10cfb006-dea9-80cd-936e-eda9bc0c9892" class="">
+</p></div><div id="10dfb006-dea9-80db-9790-ee7437b2553a" style="width:37.499999999999986%" class="column"><figure id="10cfb006-dea9-8006-b730-c1b94f8a3347" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f6ceecac-00af-4774-8432-e23768e9027d.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f6ceecac-00af-4774-8432-e23768e9027d.png"/></a><figcaption>2D Fourier Transform of High Pass Filtered Joker (high frequency image)</figcaption></figure></div><div id="10cfb006-dea9-8015-8af5-ec6a39ee5f59" style="width:37.499999999999986%" class="column"><figure id="10cfb006-dea9-809d-b5fa-d99b32bad011" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e369645a-72a1-4972-a815-8eaff3c66b58.png"><img style="width:336px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/e369645a-72a1-4972-a815-8eaff3c66b58.png"/></a><figcaption>2D Fourier Transform of Heath-Joker Hybrid Image</figcaption></figure><p id="10dfb006-dea9-8048-8789-dcf18ed9bae0" class="">
+</p></div></div><h2 id="10cfb006-dea9-807f-9a38-f1500d1737fd" class=""><strong>Part 2.3: Gaussian and Laplacian Stacks &amp; 2.4: Multiresolution Blending (a.k.a. the oraple!)</strong></h2><div id="10cfb006-dea9-8082-8db4-f0817fb1f9c2" class="column-list"><div id="10dfb006-dea9-803b-a848-e5b965aeec55" style="width:40.625%" class="column"><p id="10cfb006-dea9-809c-99dd-ff324655efc9" class="block-color-gray_background">This section aims to blend two images together using a multi resolution blending technique. This technique creates a seam between two images at each image frequency to create a smooth seam. <br/><br/>First we created Gaussian and Laplacian stacks. Stacks don’t downsample, instead the next level is produced by blurring the previous with a gaussian filter.  Stacks also do not subsample, this means the size of each level is the same. Each level of a laplacian stack is created by subtracting the gaussian stack at next level from that of the current. <br/><br/>Note: each color channel needs to be processed separately then combined<br/></p></div><div id="10dfb006-dea9-8079-af5e-f1ad898ffcb9" style="width:20.375%" class="column"><figure id="10cfb006-dea9-80aa-ad38-d7f027f66f6f" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/88f0c619-2ef9-4cc4-b2e3-e241f9e3fba6.png"><img style="width:325.62814070351754px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/88f0c619-2ef9-4cc4-b2e3-e241f9e3fba6.png"/></a><figcaption>Oraple Image </figcaption></figure></div><div id="10dfb006-dea9-80d6-92a5-c272eb01efdd" style="width:18.75%" class="column"><figure id="10cfb006-dea9-807b-a37c-f39034a1f303" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/apple.jpeg"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/apple.jpeg"/></a><figcaption>Original Apple Image</figcaption></figure></div><div id="10cfb006-dea9-8062-ac44-d27a83b44f10" style="width:20.250000000000004%" class="column"><figure id="10cfb006-dea9-800b-9880-cb3fdbf95b47" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/orange.jpeg"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/orange.jpeg"/></a><figcaption>Original Orange Image</figcaption></figure></div></div><div id="10cfb006-dea9-802f-a1a6-c3a76a0068fa" class="column-list"><div id="10cfb006-dea9-80b8-87b3-dbbc3697a83b" style="width:18.75%" class="column"><p id="10cfb006-dea9-8043-84ba-ce91ed5e4d1c" class="">
+</p><p id="10cfb006-dea9-8080-bb0b-f471f8165492" class="">
+</p><p id="10cfb006-dea9-80d7-aaa9-d05167ea8deb" class="">
+</p><p id="10cfb006-dea9-80c1-9e91-db1b7013f2d9" class="">Apple Gaussian Stack</p><p id="10cfb006-dea9-8093-9d6d-e052493a7722" class="">
+</p><p id="10cfb006-dea9-809f-a720-e5a2f4f36008" class="">
+</p><p id="10cfb006-dea9-800a-8f70-c2d583af30ba" class="">
+</p><p id="10cfb006-dea9-80bf-9c36-cee5f58a79b7" class="">
+</p><p id="10cfb006-dea9-8015-9acd-e9e5c45d503f" class="">
+</p><p id="10cfb006-dea9-808f-bbbc-ec11b461e3d3" class="">Orange Gaussian Stack</p><p id="10cfb006-dea9-8030-87b9-c9f6fa29490e" class="">
+</p><p id="10cfb006-dea9-80f7-a143-dd8e07ac0518" class="">
+</p><p id="10cfb006-dea9-808d-bc9c-c5623f5f8589" class="">
+</p><p id="10cfb006-dea9-80ba-9cfc-d1567de70331" class="">
+</p><p id="10cfb006-dea9-8052-ba78-e90d25cadd5c" class="">
+</p><p id="10cfb006-dea9-80c4-aae7-fa715cbba342" class="">
+</p><p id="10cfb006-dea9-8068-acfa-e34a18da9459" class="">Apple Laplacian Stack</p><p id="10cfb006-dea9-80a1-bf10-c994c52c42a4" class="">
+</p><p id="10cfb006-dea9-8088-afd4-c55a3c8bb9b0" class="">
+</p><p id="10cfb006-dea9-8080-8b30-f8700d0c3bc9" class="">
+</p><p id="10cfb006-dea9-8057-9244-e8b4f049d512" class="">
+</p><p id="10cfb006-dea9-8000-8365-eeb0e448e360" class="">
+</p><p id="10cfb006-dea9-800d-92b3-ca426c783128" class="">
+</p><p id="10cfb006-dea9-80ab-8832-f821cab1c99f" class="">Orange Laplacian Stack</p><p id="10cfb006-dea9-8086-8364-ca05c0f0c0d0" class="">
+</p><p id="10cfb006-dea9-8010-a135-e89202fcc6bf" class="">
+</p><p id="10cfb006-dea9-80ac-b4df-dad3d331ab7a" class="">
+</p><p id="10cfb006-dea9-80db-88c8-f02920acb05b" class="">
+</p><p id="10cfb006-dea9-805c-b80e-e0b97f658b45" class="">
+</p><p id="10dfb006-dea9-8090-b560-ffbd7e4d1e8d" class="">
+</p><p id="10cfb006-dea9-80a4-8187-cfd4cb850340" class="">Blended Laplacian Stack</p><p id="10dfb006-dea9-8051-9156-e6fd7983d122" class="">
+</p><p id="10dfb006-dea9-8074-a4a0-ea97169377ce" class="">
+</p><p id="10dfb006-dea9-804f-a5cf-d69dd27652ee" class="">
+</p><p id="10dfb006-dea9-8016-9d98-fa633dc969ca" class="">
+</p><p id="10dfb006-dea9-8046-922e-c950052976c7" class="">
+</p><p id="10dfb006-dea9-802a-9c3c-e7261605693a" class="">
+</p><p id="10dfb006-dea9-8068-abc3-fcfa1c6cb5d1" class="">Mask Gaussian Stack</p><p id="10dfb006-dea9-80de-b377-fa91c71e3cbd" class="">
+</p><p id="10dfb006-dea9-80fd-9742-c1f6844ed934" class="">
+</p><p id="10dfb006-dea9-80fe-90cf-db45fc4880c4" class="">
+</p></div><div id="10cfb006-dea9-80f0-8330-ea8fc5f77e6d" style="width:81.25%" class="column"><figure id="10cfb006-dea9-8058-bbff-d9e4b3a556f6" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2e49240d-457d-4b2a-8c94-adc69e88f4bf.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2e49240d-457d-4b2a-8c94-adc69e88f4bf.png"/></a></figure><figure id="10cfb006-dea9-80fa-be9f-cb57f4cb0203" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/4fea8fb4-f81c-488a-9322-410c2a8d5cfc.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/4fea8fb4-f81c-488a-9322-410c2a8d5cfc.png"/></a></figure><figure id="10cfb006-dea9-809f-aebb-f26e094c3fe1" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/a51dfb37-dc6d-4e12-ae1d-648e6662a1e7.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/a51dfb37-dc6d-4e12-ae1d-648e6662a1e7.png"/></a></figure><figure id="10cfb006-dea9-8066-b549-e548c399b7b2" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2b5e9a2a-0587-4711-a5af-c5e4f27477ef.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2b5e9a2a-0587-4711-a5af-c5e4f27477ef.png"/></a></figure><figure id="10cfb006-dea9-80f4-ae18-e852fef8bdc5" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/58d1be38-6ca9-46cb-aacd-bab2ebab8b71.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/58d1be38-6ca9-46cb-aacd-bab2ebab8b71.png"/></a></figure><figure id="10cfb006-dea9-807d-8ef2-f6037b9bc07e" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/44d513e2-a8e5-46b2-b3d7-38d0dc8e0cde.png"><img style="width:1454px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/44d513e2-a8e5-46b2-b3d7-38d0dc8e0cde.png"/></a></figure><p id="10dfb006-dea9-800d-9531-e3015a2621d7" class="">
+</p></div></div><div id="10dfb006-dea9-800a-adef-ec2e8fc42628" class="column-list"><div id="10dfb006-dea9-80be-805f-e839df1df571" style="width:43.75%" class="column"><p id="10dfb006-dea9-80b2-838c-e886ce249df2" class="">
+</p><p id="10dfb006-dea9-8008-9cf3-d4aa90067ae0" class="">Recreation of  Figure 3.42 in <a href="https://www.dropbox.com/s/bzt69u4azxyfpjo/SzeliskiBookDraft_20210828.pdf?dl=0">Szelski (Ed 2)</a> </p><p id="10dfb006-dea9-8091-8fbc-d46308a8563e" class="">
+</p><p id="10dfb006-dea9-809c-9452-fb948e7dd4fe" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Oraple Images:</span><br/> A vertical mask was used. For each level, a blended level is created with this equation:<br/> <br/><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mtext>laplacian_stack1</mtext><mo stretchy="false">[</mo><mtext>level</mtext><mo stretchy="false">]</mo><mo>×</mo><mtext>gaussian_stack_mask</mtext><mo stretchy="false">[</mo><mtext>level</mtext><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mtext>laplacian_stack2</mtext><mo stretchy="false">[</mo><mtext>level</mtext><mo stretchy="false">]</mo><mo>×</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mtext>gaussian_stack_mask</mtext><mo stretchy="false">[</mo><mtext>level</mtext><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{laplacian\_stack1}[ \text{level} ] \times \text{gaussian\_stack\_mask}[ \text{level} ]) + (\text{laplacian\_stack2}[ \text{level} ] \times (1 - \text{gaussian\_stack\_mask}[ \text{level} ]))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">laplacian_stack1</span></span><span class="mopen">[</span><span class="mord text"><span class="mord">level</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">gaussian_stack_mask</span></span><span class="mopen">[</span><span class="mord text"><span class="mord">level</span></span><span class="mclose">])</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">laplacian_stack2</span></span><span class="mopen">[</span><span class="mord text"><span class="mord">level</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">gaussian_stack_mask</span></span><span class="mopen">[</span><span class="mord text"><span class="mord">level</span></span><span class="mclose">]))</span></span></span></span></span><span>﻿</span></span><br/><br/>To create the final blended image, these blended levels are collapsed by adding them together. Using different sigma values and kernel sizes yielded very different results at each level. Utlimately  a sigma value of 2 for the input gaussian stacks,  a sigma value of 10 for the mask’s gaussian stack, and large kernel sizes were used. <br/><br/><br/><span style="border-bottom:0.05em solid">Bells &amp; Whistles:</span><br/>Used color to enhance the output image.<br/></p></div><div id="10dfb006-dea9-803a-8aba-d0d0ce751611" style="width:56.25%" class="column"><figure id="10dfb006-dea9-8028-9a4e-d8874236db1f" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Recreation_of_Figure_3.42_for_Oraple.png"><img style="width:720px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Recreation_of_Figure_3.42_for_Oraple.png"/></a></figure></div></div><p id="10dfb006-dea9-8028-8670-d78e4c2d6740" class="block-color-gray_background"><span style="border-bottom:0.05em solid">Other Blended Images with Irregular Masks: <br/><br/></span>Various sigma values and kernel sizes were used for the input gaussian stacks and mask gaussian stacks; were decided based on a qualitative matter.<span style="border-bottom:0.05em solid"> </span>Final hybrid image of the weiner hot dog turned out a bit blurry. I think tilting and shrinking the labradoodle input image would’ve made the hybrid image more believable. <span style="border-bottom:0.05em solid"><br/><br/>Bells &amp; Whistles:<br/></span><br/>Used color to enhance the output image.<br/></p><div id="10dfb006-dea9-80d0-97e4-df45a0067fba" class="column-list"><div id="10dfb006-dea9-8034-84c6-e22de69aea59" style="width:21.875%" class="column"><figure id="10dfb006-dea9-80d4-abcf-f882878ea5d5" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/weiner_mask.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/weiner_mask.png"/></a><figcaption>Hot Weiner Dog Mask</figcaption></figure></div><div id="10dfb006-dea9-8047-947b-d4020481455d" style="width:25%" class="column"><figure id="10dfb006-dea9-80f6-a563-f626d5a068cf" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/weiner.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/weiner.png"/></a><figcaption>Weiner Dog Original Image</figcaption></figure></div><div id="10dfb006-dea9-809c-bac2-f1b4c82478d9" style="width:25%" class="column"><figure id="10dfb006-dea9-804a-87b1-d3f476250c82" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/hotd_sized.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/hotd_sized.png"/></a><figcaption>Hot Dog Original Image</figcaption></figure></div><div id="10dfb006-dea9-80dc-83a8-ef33654eb7a8" style="width:28.125%" class="column"><figure id="10dfb006-dea9-8069-b889-eece6422a0a3" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/4afb0a52-1a98-4316-88e9-a409e955d66f.png"><img style="width:384px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/4afb0a52-1a98-4316-88e9-a409e955d66f.png"/></a><figcaption>Hot Weiner Hybrid Image</figcaption></figure></div></div><hr id="10dfb006-dea9-803a-b3dc-c13186a09841"/><div id="10dfb006-dea9-803a-89bc-f336944f5eb4" class="column-list"><div id="10dfb006-dea9-8014-b275-cf7201a41e27" style="width:21.875%" class="column"><figure id="10dfb006-dea9-800d-960e-cc0477565be5" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/mask_sf.png"><img style="width:1488.0035400390625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/mask_sf.png"/></a><figcaption>Jupiter in SF sky Mask</figcaption></figure></div><div id="10dfb006-dea9-80e2-a55f-eb08873e63b6" style="width:25%" class="column"><figure id="10dfb006-dea9-801f-924d-ecfdb43794b9" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sf.jpg"><img style="width:1488.0035400390625px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/sf.jpg"/></a><figcaption>SF Skyline Original Image</figcaption></figure></div><div id="10dfb006-dea9-808f-a587-fc5cb75b7fcf" style="width:21.875%" class="column"><figure id="10dfb006-dea9-805b-bf1a-d35f5c9e6943" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/jupyter.jpg"><img style="width:1487.9862060546875px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/jupyter.jpg"/></a><figcaption>Jupiter Original Image</figcaption></figure></div><div id="10dfb006-dea9-80f8-9fc0-ce0917e14dbd" style="width:31.25%" class="column"><figure id="10dfb006-dea9-8055-9be3-efa17e8a4568" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/6e464258-1908-40d6-bdee-6756459fdbc8.png"><img style="width:633.5839598997493px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/6e464258-1908-40d6-bdee-6756459fdbc8.png"/></a><figcaption>Jupiter in SF Sky Hybrid Image</figcaption></figure></div></div><hr id="10dfb006-dea9-8078-8a24-f0f573d0354e"/><div id="10dfb006-dea9-803d-a964-ea7de96a2537" class="column-list"><div id="10dfb006-dea9-80d4-b5fa-c44eaac7ea17" style="width:25%" class="column"><figure id="10dfb006-dea9-8049-a345-c3e1dff82a76" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/chicken_mask.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/chicken_mask.png"/></a><figcaption>Chicken Doodle Mask</figcaption></figure></div><div id="10dfb006-dea9-8068-b991-f68e8356d522" style="width:25%" class="column"><figure id="10dfb006-dea9-809c-9210-d655636ba362" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/chicken.jpg"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/chicken.jpg"/></a><figcaption>Fried Chicken Original Image</figcaption></figure></div><div id="10dfb006-dea9-806a-984d-d1160f455bc7" style="width:25%" class="column"><figure id="10dfb006-dea9-80ad-8475-fe7d2afad3c7" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/doodle.jpg"><img style="width:240px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/doodle.jpg"/></a><figcaption>Labradoodle Original Image</figcaption></figure></div><div id="10dfb006-dea9-8000-8fcc-edc4f2eaa285" style="width:25%" class="column"><figure id="10dfb006-dea9-806d-9388-fd052a057b16" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f8c06ba0-714a-4e1e-bcce-8f6fc0589da5.png"><img style="width:288px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/f8c06ba0-714a-4e1e-bcce-8f6fc0589da5.png"/></a><figcaption>Chicken Doodle Hybrid Image</figcaption></figure></div></div><div id="10dfb006-dea9-8005-9ae2-d0a0332ce8bc" class="column-list"><div id="1e8ee684-1e29-4780-8a0d-618808287b41" style="width:18.75%" class="column"><p id="34ed25d2-ae02-420e-a82c-ad5d4587815c" class="">
+</p><p id="0604036e-d491-43e1-98dc-a625d5b29fc0" class="">
+</p><p id="24735c43-fd5d-4142-ba8d-feefa6f703bf" class="">
+</p><p id="8d7f9268-2cbf-4cd7-9b5a-4fd4b1f8e44b" class="">Chicken Gaussian Stack</p><p id="d0976560-7ea6-4bd8-9acb-10e9d982fa97" class="">
+</p><p id="a1ea05ad-cb3e-4956-b542-f5a9a5cd768e" class="">
+</p><p id="d2024109-f66f-4ac0-8843-d44d07ceb1b6" class="">
+</p><p id="10dfb006-dea9-8015-8576-e17d9d1d1a8f" class="">
+</p><p id="33c8fa90-b85d-4713-9096-fce0b32cf3de" class="">
+</p><p id="1e74a2d4-5838-4df8-90c5-4304e55ecd49" class="">
+</p><p id="54973511-55f6-4959-8e83-f9bb21bb132d" class="">
+</p><p id="35e3ccdf-ea44-4709-8d98-dec73cc51526" class="">Labradoodle Gaussian Stack</p><p id="6131f04f-bd07-48bc-af73-f2a953ce3f52" class="">
+</p><p id="306c6bd4-8123-4639-8071-e56975d6ef23" class="">
+</p><p id="8b1447b4-1326-494f-b9e5-1240f7971820" class="">
+</p><p id="85f0d5d1-765f-4b35-8dd7-b6a1fbde3f17" class="">
+</p><p id="09b98fff-445c-41c0-918e-22266d060879" class="">
+</p><p id="78a63074-42f0-4033-ad19-41b2adfeb620" class="">
+</p><p id="c9cb4b5e-d7d5-4879-ae44-242ab6659644" class="">Chicken Laplacian Stack</p><p id="6f64793c-5c91-4a5f-8e81-9e39aa0c4316" class="">
+</p><p id="b499670c-e88d-4dda-8138-f898b4720b0d" class="">
+</p><p id="79e1e01a-d91c-46b8-988f-cf9d28c187f6" class="">
+</p><p id="3da91f8d-cc6b-4fba-9831-b31e2b8bac81" class="">
+</p><p id="bc958ed3-cee2-426f-aacf-c7ea11d7220d" class="">
+</p><p id="a89793c7-28ca-49bf-aaf7-2af6fc174aa8" class="">
+</p><p id="3535309e-340b-4254-85a4-9794bae715a2" class="">
+</p><p id="823ca3c8-b745-444b-a036-3115100f4771" class="">
+</p><p id="ca868999-e017-4e3d-a228-abc2cbe27b96" class="">
+</p><p id="b5ee5d68-9298-43d7-a24d-29c246007c04" class="">Labradoodle Laplacian Stack</p><p id="a823ac27-3d2f-488b-9b5b-3a93b128f3a5" class="">
+</p><p id="7855c4b6-053c-44d5-a810-77c4700465a3" class="">
+</p><p id="3c1364c0-a20b-46cf-8398-60f5c5910c87" class="">
+</p><p id="b3ae47fd-0e40-4dd8-8860-b6ba143b9756" class="">
+</p><p id="e578bfdf-d0bd-41e5-b351-d481d5f0c144" class="">
+</p><p id="347bb07e-cb60-49aa-b8a9-c7c6a98678b9" class="">
+</p><p id="c62d057e-6c4c-4501-95c8-26e40e28ae0e" class="">
+</p><p id="349d563a-e653-4a2f-9bbc-f2e5a74a8db6" class="">Blended Laplacian Stack</p><p id="050cc900-7d93-466a-98ef-b7ea443cf728" class="">
+</p><p id="6cafcfb0-a3cd-417c-b719-8163ffdf8dad" class="">
+</p><p id="a20e2947-e490-47d1-bc18-db58d314a1d9" class="">
+</p><p id="c6ce300a-f620-4f77-822b-b2c6b5a34d7b" class="">
+</p><p id="1a25ede4-3e0e-4847-8a31-c5db1fdd9b1a" class="">
+</p><p id="4a54a815-fb9a-4b32-bd5b-0c412c9f263c" class="">
+</p><p id="f9bd0018-3ea6-4f4b-b500-3d26cfab871b" class="">Mask Gaussian Stack</p><p id="10dfb006-dea9-809f-aa1d-f7cd9eddf2ef" class="">
+</p><p id="10dfb006-dea9-806a-b004-c44d5d9e6207" class="">
+</p><p id="10dfb006-dea9-8059-81ca-c4cbd3456488" class="">
+</p><p id="10dfb006-dea9-8057-a210-ff2c63f7c791" class="">
+</p><p id="10dfb006-dea9-802a-b5a4-e7319ab9fd3d" class="">
+</p><p id="10dfb006-dea9-8003-888a-fa22d15c87e8" class="">
+</p><p id="10dfb006-dea9-80d9-b81f-ca7d889f32f1" class="">
+</p><p id="10dfb006-dea9-80a3-bdce-c850a3db95fc" class="">
+</p><p id="10dfb006-dea9-8029-8900-f092dc893c4b" class="">
+</p><p id="10dfb006-dea9-8088-b593-e76463a5fd6b" class="">
+</p><p id="a6974a5d-2fba-4e9b-abb9-d1941a704f00" class="">Recreation of  Figure 3.42 in <a href="https://www.dropbox.com/s/bzt69u4azxyfpjo/SzeliskiBookDraft_20210828.pdf?dl=0">Szelski (Ed 2)</a> </p></div><div id="3594033d-b8a5-4726-9a27-418f6282a7d9" style="width:81.25%" class="column"><figure id="10dfb006-dea9-80c8-b9d4-daaaa999cf75" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/a227a1bf-0188-4ddd-84f4-adb1f00e1a35.png"><img style="width:1282.169491525424px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/a227a1bf-0188-4ddd-84f4-adb1f00e1a35.png"/></a></figure><figure id="10dfb006-dea9-8098-9f42-d45dee7808bd" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/5ceda265-0b6a-4315-96d3-6095fd439234.png"><img style="width:1454.7692307692305px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/5ceda265-0b6a-4315-96d3-6095fd439234.png"/></a></figure><figure id="10dfb006-dea9-800b-8ca6-dffd48d3a603" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/7240827d-7b10-4f94-bbb5-9ba89e5a2ae4.png"><img style="width:1248.3168316831682px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/7240827d-7b10-4f94-bbb5-9ba89e5a2ae4.png"/></a></figure><figure id="10dfb006-dea9-803e-9bd3-dde269fa74f3" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/ac532b90-f6a9-44f2-a2fc-246c0fadce71.png"><img style="width:1269.2617449664428px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/ac532b90-f6a9-44f2-a2fc-246c0fadce71.png"/></a></figure><figure id="10dfb006-dea9-80b9-a67f-dd2becd303c7" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/224d2269-a5f6-4776-9672-8737e6b19eaf.png"><img style="width:1252.450331125828px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/224d2269-a5f6-4776-9672-8737e6b19eaf.png"/></a></figure><figure id="10dfb006-dea9-80f8-988c-fd59518614d3" class="image"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2f59df28-16f6-44b9-a57f-4c7dedd4ade5.png"><img style="width:1240.1311475409836px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/2f59df28-16f6-44b9-a57f-4c7dedd4ade5.png"/></a></figure><figure id="10dfb006-dea9-8067-ad51-df4bcb05a42b" class="image" style="text-align:right"><a href="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Recreation_of_Figure_3.42.png"><img style="width:768px" src="COMPSCI%20180%20Project%202%20Fun%20with%20Filters%20and%20Frequen%2010bfb006dea98069994ccab4c5f2c268/Recreation_of_Figure_3.42.png"/></a></figure></div></div><h2 id="10dfb006-dea9-8096-963f-e3483bc3e6db" class="">Conclusions:</h2><p id="10dfb006-dea9-8024-bf5f-f9004e384f87" class="">The most important thing I learned from this project is that frequencies within an image are very important! This also means you can manipulate images quite a lot by just manipulating their frequencies! </p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
