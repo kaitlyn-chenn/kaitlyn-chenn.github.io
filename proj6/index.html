@@ -1,0 +1,689 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>COMPSCI 180 Final Project 1: Pyramid-Based Texture Analysis/Texture; Matching and Generating Texture using Image Pyramids </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="158fb006-dea9-809c-8bd4-f107323f5038" class="page serif"><header><h1 class="page-title">COMPSCI 180 Final Project 1: Pyramid-Based Texture Analysis/Texture; Matching and Generating Texture using Image Pyramids </h1><p class="page-description"></p></header><div class="page-body"><h3 id="15bfb006-dea9-80ab-8305-c7875fe9f01e" class="">Aishik Bhattacharyya &amp; Kaitlyn Chen </h3><h2 id="15bfb006-dea9-80cd-9aeb-e787cd7ecdd9" class="">Introduction: </h2><p id="15bfb006-dea9-80db-bd29-dfbf973dfaa7" class="block-color-gray_background">This project aims to create a synthetic 2D texture based on an input image. The algorithms used in this project follow that of <mark class="highlight-default"><a href="https://www.cns.nyu.edu/heegerlab/content/publications/Heeger-siggraph95.pdf">&quot;</a></mark><a href="https://www.cns.nyu.edu/heegerlab/content/publications/Heeger-siggraph95.pdf">Pyramid-Based Texture Analysis/Texture&quot;</a>. The paper uses a modified laplacian pyramid that adds orientations in the frequency domain to the pyramid. By matching histograms of the input image and noisy image, as well as the oriented laplacian pyramid, the paper generates oriented textures that match the input image’s structure and pixel values.  We also used <a href="https://www.ipol.im/pub/art/2014/79/article_lr.pdf">this paper </a>for support.</p><h2 id="15bfb006-dea9-805d-9d26-fef962246fd5" class="">Get Oriented Filters: </h2><p id="15bfb006-dea9-804c-838e-ee58f0dd6c1c" class="block-color-gray_background">We first need to get the oriented filters, which extract image features (like edges and textures) along specific orientations. Throughout this project we used 4 oriented filters (<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0</mn><mo lspace="0em" rspace="0em">∘</mo></msup><mo separator="true">,</mo><mn>4</mn><msup><mn>5</mn><mo lspace="0em" rspace="0em">∘</mo></msup><mo separator="true">,</mo><mn>9</mn><msup><mn>0</mn><mo lspace="0em" rspace="0em">∘</mo></msup><mo separator="true">,</mo><mn>13</mn><msup><mn>5</mn><mo lspace="0em" rspace="0em">∘</mo></msup></mrow><annotation encoding="application/x-tex">0^{\circ}, 45^{\circ}, 90^{\circ}, 135^{\circ}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8686em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6741em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∘</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">4</span><span class="mord"><span class="mord">5</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6741em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∘</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">9</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6741em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∘</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">13</span><span class="mord"><span class="mord">5</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6741em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∘</span></span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>) , unless specified otherwise. Typically, the filters are defined in the frequency domain, as in the paper. However for simplicity we will define the filters in the spatial domain. We used the predefined filters from pyrtools (<code>pt.steerable_filters(&#x27;sp3_filters&#x27;)</code>) .  A filter tuned to any orientation can be created through a linear combination of the responses of the four basis filters computed at the same location. This property is what allows the pyramid we later construct to be “steerable”/rotation-invariant.</p><figure id="158fb006-dea9-80f8-ba8d-d7d3e4c55c6b" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/87dc5707-4918-40c7-9aef-b5115ee2c09d.png"><img style="width:1137.9474940334128px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/87dc5707-4918-40c7-9aef-b5115ee2c09d.png"/></a></figure><p id="15bfb006-dea9-8062-bd8d-f24f91a5c2d1" class="">Example Images Convolved with the Oriented Filters: </p><figure id="158fb006-dea9-807b-96de-f4034001d789" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image.png"><img style="width:1239.9393310546875px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image.png"/></a></figure><figure id="158fb006-dea9-80cb-9006-f22ceb1a867f" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%201.png"><img style="width:1239.9393310546875px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%201.png"/></a></figure><figure id="158fb006-dea9-8016-9b55-e4550c9a6a8c" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%202.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%202.png"/></a></figure><div id="15bfb006-dea9-809b-903e-ec81f813100b" class="column-list"><div id="15bfb006-dea9-8087-a77c-cf07838774c1" style="width:25%" class="column"><p id="15bfb006-dea9-8092-999c-c55f35bf4de0" class="block-color-gray_background">Sum of the oriented filters vs a standard laplacian band pass filter: </p><p id="15bfb006-dea9-808b-991a-fdd9290a3f80" class="">
+</p><p id="15bfb006-dea9-8036-97b1-db1bd8ebe6ee" class="">
+</p></div><div id="15bfb006-dea9-80b9-840e-caec2d82a0ca" style="width:25%" class="column"><figure id="15bfb006-dea9-8016-bae6-dcec797a90f3" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%203.png"><img style="width:388.9844055175781px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%203.png"/></a></figure></div><div id="15bfb006-dea9-8004-965f-e4203dd76465" style="width:25%" class="column"><figure id="15bfb006-dea9-8016-8c2e-eb6d7ce6bf72" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%204.png"><img style="width:388.9844055175781px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%204.png"/></a></figure></div><div id="15bfb006-dea9-8098-ad59-dcb89093cdd9" style="width:25%" class="column"><figure id="15bfb006-dea9-80e8-9a91-d6bbd36f9022" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%205.png"><img style="width:384px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%205.png"/></a></figure></div></div><h2 id="15cfb006-dea9-80a0-8751-cd17327eacab" class="">Steerable/Oriented Pyramid Construction: </h2><p id="15cfb006-dea9-80e5-ae42-d71ed2923f4c" class="block-color-gray_background">Laplacian pyramids do not capture orientated structures in textures since the basis functions are symmetric, so we need to use a steerable pyramid. Steerable pyramids further divides spatial frequency bands into a set of orientation bands. Given an input source texture image, we first split the image into a high frequency and low frequency components. Then we apply bandpass oriented filters to the low frequency image and then downsample, such that each level of the pyramid is constructed from the previous level’s lowpass band. Similarly we can collapse the pyramid since the steerable pyramid is self-inverting. </p><div id="15cfb006-dea9-8059-98ad-f9873f249994" class="column-list"><div id="15cfb006-dea9-80bc-b49d-c20cce1941ec" style="width:25%" class="column"><p id="15cfb006-dea9-80d4-8c13-e73ade47a91a" class="">Example of Oriented Pyramid: </p><figure id="15cfb006-dea9-8013-8351-f2c2c6bb6514" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%206.png"><img style="width:672px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%206.png"/></a></figure><figure id="15cfb006-dea9-805e-9807-d62d336aef29" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%207.png"><img style="width:336px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%207.png"/></a></figure><p id="15cfb006-dea9-8065-8076-e846fe01c6ad" class="">
+</p></div><div id="15cfb006-dea9-8027-b8d8-dba20c5fc6e6" style="width:75%" class="column"><figure id="158fb006-dea9-8031-bc3b-c4550d8cc110" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%208.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%208.png"/></a></figure><figure id="158fb006-dea9-8095-9e9d-e5ad14f91d7f" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%209.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%209.png"/></a></figure><figure id="158fb006-dea9-8002-af38-e9d90fef59d1" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2010.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2010.png"/></a></figure></div></div><h2 id="15cfb006-dea9-8051-a8ad-fb53cd07cc1a" class="">Histogram Matching: </h2><div id="15cfb006-dea9-807f-8ad4-cdeb5ddae402" class="column-list"><div id="15cfb006-dea9-8018-b8da-ce71ce4034b7" style="width:18.75%" class="column"><p id="15cfb006-dea9-801e-a975-d57efe4a9e79" class="block-color-gray_background">Given an input image and a reference image, histogram matching will change the gray values of the input image to then have the same histogram as the reference image. To do so we sort each images’ pixel values, align the sorted intensities, then map the input image’s pixels to the reference histogram. </p><p id="15cfb006-dea9-8088-949e-e9132a6557dc" class="">
+</p></div><div id="15cfb006-dea9-8038-9b83-ee744d6cb833" style="width:81.25%" class="column"><figure id="15cfb006-dea9-8096-a043-da501229edec" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2011.png"><img style="width:1248px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2011.png"/></a></figure></div></div><h2 id="15cfb006-dea9-80ee-9f17-ec9377d55e5d" class="">Texture Matching (black &amp; white): </h2><p id="15cfb006-dea9-80ec-be74-d7157fac88dc" class="block-color-gray_background">Texture matching aims to modify an input gaussian white noise image to look like the input texture source image. We first match the histograms of the noise image to the source image. We then make pyramids from both the new noise image and texture image. We loop through these two pyramids and match the histograms of each to their corresponding pyramid subbands. We collapse this histogram matched noise pyramid to generate a preliminarly synthetic texture. When we looped through the two pyramids to match histograms, the collapsed image’s histogram then changes so we need iterate through this process, rematching the histograms of the images and the histograms of the pyramids’ subbands. The idea is that after some iterations the output histograms will match that of the source texture.</p><p id="15cfb006-dea9-80dc-857d-fd272648fbe9" class="">Example of texture matching: </p><figure id="158fb006-dea9-80ad-84b0-f1dd08c1dc98" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2012.png"><img style="width:1239.96533203125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2012.png"/></a></figure><h2 id="15cfb006-dea9-8006-bd82-fca2b2db7c85" class="">Adding Color to Texture Matching: </h2><p id="15cfb006-dea9-808f-b373-e77c464a79ee" class="block-color-gray_background">We can not simply treat each RGB channel independent of one another and synthesize them independently, since they are all correlated. Instead we will change the RGB color space to be input adapted so that each independent color channel synthesis yields good results. We create this new RBG color space with principal component analysis (PCA) of the RBG point cloud corresponding to the input source texture. The idea is that in the PCA color space the 3 channels are decorrelated and independent, so we can synthesize them independently. <br/><br/>The source image is first cropped to be a square with dimensions as a power of two, centered around zero, and its covariance matrix is used to compute a decorrelation transformation. We can then synthesize synthetic textures for each of the 3 decorrelated RBG channels. This gives the output synthetic textures in PCA color space, so we need to recorrelate the channels using the inverse transformation and recentering the image to match that of the source image. We can simply stack these channels to give our final outputted synthesized color texture. <br/></p><p id="15cfb006-dea9-80e4-9c85-e70536303f1f" class="">
+</p><p id="15cfb006-dea9-80c7-b19d-efad9b0e7c6e" class="">Example results all using 5 iterations in texture matching and 4 orientation filters: </p><div id="15cfb006-dea9-80e3-8787-ea7bd9c8c797" class="column-list"><div id="15cfb006-dea9-8063-9ead-f9f5e0982d8d" style="width:50%" class="column"><figure id="15cfb006-dea9-8078-99db-c445f5b93433" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2013.png"><img style="width:1239.982666015625px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2013.png"/></a><figcaption>3 pyramid levels</figcaption></figure><figure id="15cfb006-dea9-80ed-a621-cd12b0a9279a" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2014.png"><img style="width:1239.982666015625px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2014.png"/></a><figcaption>3 pyramid levels</figcaption></figure><figure id="15cfb006-dea9-801a-9858-ef5a7064d856" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2015.png"><img style="width:1239.982666015625px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2015.png"/></a><figcaption>Failure example</figcaption></figure></div><div id="15cfb006-dea9-80ef-8765-cbb06b96fc65" style="width:50%" class="column"><figure id="15cfb006-dea9-8022-b777-e335f58d1ae1" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2016.png"><img style="width:1239.982666015625px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2016.png"/></a><figcaption>3 pyramid levels</figcaption></figure><figure id="15cfb006-dea9-80f4-b6e0-df08f14c5d78" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2017.png"><img style="width:596.9791870117188px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2017.png"/></a><figcaption>3 pyramid levels</figcaption></figure><figure id="15cfb006-dea9-80ec-b94b-fb1263083b73" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2018.png"><img style="width:551.4757080078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2018.png"/></a><figcaption>Failure example </figcaption></figure></div></div><p id="15cfb006-dea9-8095-b412-f7063723397d" class="">For the failure examples I think they failed since the images were not homogeneous textures. Also the textures may be locally oriented but the dominant orientation is different. </p><h2 id="15cfb006-dea9-8062-b673-decb90accc1d" class="">Bells &amp; Whistles - Hypertuning:</h2><p id="15cfb006-dea9-80dc-9901-d80e92e1f61e" class="block-color-gray_background">First we will tune the number of pyramid levels keeping the number of iterations 5 and using 4 orientation filters. We can see that the number of pyramid levels improves it up until a certain point,  but will get worse. We can see that tuning the pyramid levels we can achieve better results</p><figure id="15cfb006-dea9-809a-ab0f-d52589504440" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2019.png"><img style="width:1248px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2019.png"/></a></figure><figure id="15cfb006-dea9-80a6-ba3c-ef85df916397" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2020.png"><img style="width:1248px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2020.png"/></a></figure><p id="15cfb006-dea9-801d-8162-e20a27a62e0a" class="block-color-gray_background">Here we will tune the number of iterations (keeping the number of pyramid levels 3 and 4 orientation filters). We can see that similar to the levels tuning above after a certain point the accuracy diminishes. Increasing the number of iterations is computationally exprensive</p><figure id="15cfb006-dea9-80cc-9302-c319120fbf17" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2021.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2021.png"/></a></figure><figure id="15cfb006-dea9-8021-94ef-ee4502b82387" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2022.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2022.png"/></a></figure><p id="15cfb006-dea9-807a-9803-cdcd2e15d8af" class="block-color-gray_background">Here we will tune the number of orientation filters (keeping number of iterations = 3 and number of pyramid levels = 3). The orientation filters will be defined by the pyrtools functions. </p><figure id="15cfb006-dea9-80c4-8418-efb6be05247b" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2023.png"><img style="width:596.9791870117188px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2023.png"/></a></figure><figure id="15cfb006-dea9-8093-922a-da34ea6a3140" class="image"><a href="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2024.png"><img style="width:1239.9913330078125px" src="COMPSCI%20180%20Final%20Project%201%20Pyramid-Based%20Texture%20%20158fb006dea9809c8bd4f107323f5038/image%2024.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
